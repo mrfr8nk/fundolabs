@@ -9,38 +9,125 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as AppLabsPhysicsRouteImport } from './routes/_app.labs.physics'
+import { Route as AppLabsChemistryRouteImport } from './routes/_app.labs.chemistry'
+import { Route as AppLabsSlugRouteImport } from './routes/_app.labs.$slug'
 
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLabsPhysicsRoute = AppLabsPhysicsRouteImport.update({
+  id: '/labs/physics',
+  path: '/labs/physics',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLabsChemistryRoute = AppLabsChemistryRouteImport.update({
+  id: '/labs/chemistry',
+  path: '/labs/chemistry',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLabsSlugRoute = AppLabsSlugRouteImport.update({
+  id: '/labs/$slug',
+  path: '/labs/$slug',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/labs/$slug': typeof AppLabsSlugRoute
+  '/labs/chemistry': typeof AppLabsChemistryRoute
+  '/labs/physics': typeof AppLabsPhysicsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/labs/$slug': typeof AppLabsSlugRoute
+  '/labs/chemistry': typeof AppLabsChemistryRoute
+  '/labs/physics': typeof AppLabsPhysicsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/labs/$slug': typeof AppLabsSlugRoute
+  '/_app/labs/chemistry': typeof AppLabsChemistryRoute
+  '/_app/labs/physics': typeof AppLabsPhysicsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/labs/$slug'
+    | '/labs/chemistry'
+    | '/labs/physics'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/labs/$slug'
+    | '/labs/chemistry'
+    | '/labs/physics'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/auth'
+    | '/_app/dashboard'
+    | '/_app/labs/$slug'
+    | '/_app/labs/chemistry'
+    | '/_app/labs/physics'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +135,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/labs/physics': {
+      id: '/_app/labs/physics'
+      path: '/labs/physics'
+      fullPath: '/labs/physics'
+      preLoaderRoute: typeof AppLabsPhysicsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/labs/chemistry': {
+      id: '/_app/labs/chemistry'
+      path: '/labs/chemistry'
+      fullPath: '/labs/chemistry'
+      preLoaderRoute: typeof AppLabsChemistryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/labs/$slug': {
+      id: '/_app/labs/$slug'
+      path: '/labs/$slug'
+      fullPath: '/labs/$slug'
+      preLoaderRoute: typeof AppLabsSlugRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppLabsSlugRoute: typeof AppLabsSlugRoute
+  AppLabsChemistryRoute: typeof AppLabsChemistryRoute
+  AppLabsPhysicsRoute: typeof AppLabsPhysicsRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppDashboardRoute: AppDashboardRoute,
+  AppLabsSlugRoute: AppLabsSlugRoute,
+  AppLabsChemistryRoute: AppLabsChemistryRoute,
+  AppLabsPhysicsRoute: AppLabsPhysicsRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
