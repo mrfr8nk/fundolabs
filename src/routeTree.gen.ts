@@ -12,6 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppTutorRouteImport } from './routes/_app.tutor'
+import { Route as AppTeacherRouteImport } from './routes/_app.teacher'
+import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppReportsRouteImport } from './routes/_app.reports'
+import { Route as AppExamRouteImport } from './routes/_app.exam'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppLabsPhysicsRouteImport } from './routes/_app.labs.physics'
 import { Route as AppLabsChemistryRouteImport } from './routes/_app.labs.chemistry'
@@ -30,6 +35,31 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppTutorRoute = AppTutorRouteImport.update({
+  id: '/tutor',
+  path: '/tutor',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTeacherRoute = AppTeacherRouteImport.update({
+  id: '/teacher',
+  path: '/teacher',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppReportsRoute = AppReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppExamRoute = AppExamRouteImport.update({
+  id: '/exam',
+  path: '/exam',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
@@ -56,6 +86,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AppDashboardRoute
+  '/exam': typeof AppExamRoute
+  '/reports': typeof AppReportsRoute
+  '/settings': typeof AppSettingsRoute
+  '/teacher': typeof AppTeacherRoute
+  '/tutor': typeof AppTutorRoute
   '/labs/$slug': typeof AppLabsSlugRoute
   '/labs/chemistry': typeof AppLabsChemistryRoute
   '/labs/physics': typeof AppLabsPhysicsRoute
@@ -64,6 +99,11 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AppDashboardRoute
+  '/exam': typeof AppExamRoute
+  '/reports': typeof AppReportsRoute
+  '/settings': typeof AppSettingsRoute
+  '/teacher': typeof AppTeacherRoute
+  '/tutor': typeof AppTutorRoute
   '/labs/$slug': typeof AppLabsSlugRoute
   '/labs/chemistry': typeof AppLabsChemistryRoute
   '/labs/physics': typeof AppLabsPhysicsRoute
@@ -74,6 +114,11 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/exam': typeof AppExamRoute
+  '/_app/reports': typeof AppReportsRoute
+  '/_app/settings': typeof AppSettingsRoute
+  '/_app/teacher': typeof AppTeacherRoute
+  '/_app/tutor': typeof AppTutorRoute
   '/_app/labs/$slug': typeof AppLabsSlugRoute
   '/_app/labs/chemistry': typeof AppLabsChemistryRoute
   '/_app/labs/physics': typeof AppLabsPhysicsRoute
@@ -84,6 +129,11 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/exam'
+    | '/reports'
+    | '/settings'
+    | '/teacher'
+    | '/tutor'
     | '/labs/$slug'
     | '/labs/chemistry'
     | '/labs/physics'
@@ -92,6 +142,11 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/exam'
+    | '/reports'
+    | '/settings'
+    | '/teacher'
+    | '/tutor'
     | '/labs/$slug'
     | '/labs/chemistry'
     | '/labs/physics'
@@ -101,6 +156,11 @@ export interface FileRouteTypes {
     | '/_app'
     | '/auth'
     | '/_app/dashboard'
+    | '/_app/exam'
+    | '/_app/reports'
+    | '/_app/settings'
+    | '/_app/teacher'
+    | '/_app/tutor'
     | '/_app/labs/$slug'
     | '/_app/labs/chemistry'
     | '/_app/labs/physics'
@@ -135,6 +195,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/tutor': {
+      id: '/_app/tutor'
+      path: '/tutor'
+      fullPath: '/tutor'
+      preLoaderRoute: typeof AppTutorRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/teacher': {
+      id: '/_app/teacher'
+      path: '/teacher'
+      fullPath: '/teacher'
+      preLoaderRoute: typeof AppTeacherRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/reports': {
+      id: '/_app/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/exam': {
+      id: '/_app/exam'
+      path: '/exam'
+      fullPath: '/exam'
+      preLoaderRoute: typeof AppExamRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -168,6 +263,11 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
+  AppExamRoute: typeof AppExamRoute
+  AppReportsRoute: typeof AppReportsRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppTeacherRoute: typeof AppTeacherRoute
+  AppTutorRoute: typeof AppTutorRoute
   AppLabsSlugRoute: typeof AppLabsSlugRoute
   AppLabsChemistryRoute: typeof AppLabsChemistryRoute
   AppLabsPhysicsRoute: typeof AppLabsPhysicsRoute
@@ -175,6 +275,11 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
+  AppExamRoute: AppExamRoute,
+  AppReportsRoute: AppReportsRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppTeacherRoute: AppTeacherRoute,
+  AppTutorRoute: AppTutorRoute,
   AppLabsSlugRoute: AppLabsSlugRoute,
   AppLabsChemistryRoute: AppLabsChemistryRoute,
   AppLabsPhysicsRoute: AppLabsPhysicsRoute,
