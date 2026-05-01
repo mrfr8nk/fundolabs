@@ -14,16 +14,283 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ai_conversations: {
+        Row: {
+          created_at: string
+          id: string
+          messages: Json
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          messages?: Json
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          messages?: Json
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      exam_attempts: {
+        Row: {
+          answers: Json | null
+          created_at: string
+          duration_seconds: number | null
+          experiment_id: string | null
+          id: string
+          score: number | null
+          user_id: string
+        }
+        Insert: {
+          answers?: Json | null
+          created_at?: string
+          duration_seconds?: number | null
+          experiment_id?: string | null
+          id?: string
+          score?: number | null
+          user_id: string
+        }
+        Update: {
+          answers?: Json | null
+          created_at?: string
+          duration_seconds?: number | null
+          experiment_id?: string | null
+          id?: string
+          score?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_attempts_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "experiments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      experiments: {
+        Row: {
+          created_at: string
+          description: string | null
+          difficulty: number | null
+          duration_minutes: number | null
+          id: string
+          level: Database["public"]["Enums"]["education_level"]
+          slug: string
+          subject: Database["public"]["Enums"]["subject"]
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          difficulty?: number | null
+          duration_minutes?: number | null
+          id?: string
+          level: Database["public"]["Enums"]["education_level"]
+          slug: string
+          subject: Database["public"]["Enums"]["subject"]
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          difficulty?: number | null
+          duration_minutes?: number | null
+          id?: string
+          level?: Database["public"]["Enums"]["education_level"]
+          slug?: string
+          subject?: Database["public"]["Enums"]["subject"]
+          title?: string
+        }
+        Relationships: []
+      }
+      lab_sessions: {
+        Row: {
+          completed_at: string | null
+          experiment_id: string | null
+          id: string
+          observations: Json | null
+          score: number | null
+          started_at: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          observations?: Json | null
+          score?: number | null
+          started_at?: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          observations?: Json | null
+          score?: number | null
+          started_at?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lab_sessions_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "experiments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          level: Database["public"]["Enums"]["education_level"] | null
+          school_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          level?: Database["public"]["Enums"]["education_level"] | null
+          school_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          level?: Database["public"]["Enums"]["education_level"] | null
+          school_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reports: {
+        Row: {
+          ai_generated: boolean | null
+          content: string | null
+          created_at: string
+          id: string
+          session_id: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          ai_generated?: boolean | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          session_id?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          ai_generated?: boolean | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          session_id?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "lab_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      schools: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          region: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          region?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          region?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "teacher" | "student"
+      education_level: "o_level" | "a_level"
+      subject: "chemistry" | "physics"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +417,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "teacher", "student"],
+      education_level: ["o_level", "a_level"],
+      subject: ["chemistry", "physics"],
+    },
   },
 } as const
