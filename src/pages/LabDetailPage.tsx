@@ -204,7 +204,7 @@ export default function LabDetailPage() {
         const { data } = await supabase.from("experiments").select("*").eq("slug", safeSlug).maybeSingle();
         if (data) {
           const seed = getExperiment(data.slug);
-          setExp((seed ? { ...seed, ...data } : (data as unknown as Experiment)));
+          setExp(seed ? { ...seed, ...data, description: data.description ?? seed.description } : (data as unknown as Experiment));
         }
       }
       const { data: { user } } = await supabase.auth.getUser();
