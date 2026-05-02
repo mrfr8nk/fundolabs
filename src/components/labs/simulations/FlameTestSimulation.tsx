@@ -116,7 +116,7 @@ export function FlameTestSimulation({ experiment }: { slug: string; experiment: 
           <text x="46" y="291" fill="rgba(200,230,255,0.8)" fontSize="7.5" fontFamily="Space Grotesk">{metal.name}</text>
           <text x="28" y="305" fill="rgba(150,180,255,0.5)" fontSize="7" fontFamily="monospace">Ion: {metal.ion}</text>
           <foreignObject x="28" y="310" width="164" height="44">
-            <div xmlns="http://www.w3.org/1999/xhtml" style={{ fontSize: "7px", lineHeight: "1.4", color: burning ? metal.color1 : "rgba(150,180,255,0.5)", transition: "color 0.5s", fontFamily: "Space Grotesk" }}>
+            <div style={{ fontSize: "7px", lineHeight: "1.4", color: burning ? metal.color1 : "rgba(150,180,255,0.5)", transition: "color 0.5s", fontFamily: "Space Grotesk" }}>
               {metal.obs}
             </div>
           </foreignObject>

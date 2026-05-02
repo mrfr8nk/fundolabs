@@ -13,6 +13,7 @@ export default function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function AuthPage() {
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/dashboard`,
-            data: { full_name: fullName },
+            data: { full_name: fullName, username },
           },
         });
         if (error) throw error;
@@ -70,20 +71,26 @@ export default function AuthPage() {
             {mode === "signin" ? "Sign in to continue your experiments." : "Start performing science experiments today."}
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" autoComplete="on">
             {mode === "signup" && (
-              <div className="space-y-1.5">
-                <Label htmlFor="name">Full name</Label>
-                <Input id="name" value={fullName} onChange={(e) => setFullName(e.target.value)} required className="glass border-white/10" />
-              </div>
+              <>
+                <div className="space-y-1.5">
+                  <Label htmlFor="name">Full name</Label>
+                  <Input id="name" name="name" autoComplete="name" value={fullName} onChange={(e) => setFullName(e.target.value)} required className="glass border-white/10" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="username">Username</Label>
+                  <Input id="username" name="username" autoComplete="username" value={username} onChange={(e) => setUsername(e.target.value)} required className="glass border-white/10" placeholder="e.g. mrfrankofc" />
+                </div>
+              </>
             )}
             <div className="space-y-1.5">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="glass border-white/10" />
+              <Input id="email" name="email" type="email" autoComplete={mode === "signup" ? "email" : "username"} value={email} onChange={(e) => setEmail(e.target.value)} required className="glass border-white/10" />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="glass border-white/10" />
+              <Input id="password" name="password" type="password" autoComplete={mode === "signup" ? "new-password" : "current-password"} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="glass border-white/10" />
             </div>
             <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-primary to-accent text-primary-foreground glow-primary h-11">
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : mode === "signin" ? "Sign in" : "Create account"}

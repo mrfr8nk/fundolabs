@@ -61,7 +61,13 @@ export default function TutorPage() {
     setMessages((prev) => [...prev, { id: crypto.randomUUID(), role: "user", content: msg, timestamp: new Date() }]);
 
     const { data: { user } } = await supabase.auth.getUser();
-    if (user) await supabase.from("ai_conversations").insert({ user_id: user.id, role: "user", content: msg });
+    if (user) {
+      await supabase.from("ai_conversations").insert({
+        user_id: user.id,
+        title: msg.slice(0, 60),
+        messages: [{ role: "user", content: msg, ts: new Date().toISOString() }],
+      });
+    }
 
     let response: string;
     try {
