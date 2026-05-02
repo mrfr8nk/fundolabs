@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Beaker, ArrowRight, Clock, BarChart3, Atom, FlaskConical, Search, Bookmark } from "lucide-react";
 import { motion } from "framer-motion";
@@ -143,8 +143,8 @@ export function LabList({
               whileHover={{ y: -4 }}
             >
               <Link
-                to="/labs/$slug"
-                params={{ slug: exp.slug }}
+                
+                to={`/labs/${exp.slug}`}
                 className="glass-card rounded-2xl p-6 hover:border-primary/40 transition group block relative"
               >
                 <div className="flex items-start justify-between mb-4">

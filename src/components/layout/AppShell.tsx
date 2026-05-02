@@ -1,7 +1,7 @@
-import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, FlaskConical, Atom, Brain, GraduationCap,
-  FileText, Users, Settings, LogOut, Menu, X
+  FileText, Users, Settings, LogOut, Menu, X, PlusCircle
 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,6 +12,7 @@ const nav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/labs/chemistry", label: "Chemistry Labs", icon: FlaskConical },
   { to: "/labs/physics", label: "Physics Labs", icon: Atom },
+  { to: "/labs/create", label: "Create Experiment", icon: PlusCircle },
   { to: "/tutor", label: "AI Tutor", icon: Brain },
   { to: "/exam", label: "Exam Mode", icon: GraduationCap },
   { to: "/reports", label: "Reports", icon: FileText },
@@ -27,12 +28,11 @@ export function AppShell() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     toast.success("Signed out");
-    navigate({ to: "/" });
+    navigate("/");
   };
 
   return (
     <div className="min-h-screen flex">
-      {/* Sidebar */}
       <aside
         className={`fixed lg:static inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ${
           open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
@@ -48,9 +48,9 @@ export function AppShell() {
             </span>
           </Link>
 
-          <nav className="flex-1 px-3 py-4 space-y-1">
+          <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
             {nav.map((item) => {
-              const active = location.pathname.startsWith(item.to);
+              const active = location.pathname === item.to || (item.to !== "/dashboard" && location.pathname.startsWith(item.to));
               const Icon = item.icon;
               return (
                 <Link
