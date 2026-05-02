@@ -4,7 +4,7 @@ import { Brain, Send, Sparkles, FlaskConical, Atom, BookOpen, RotateCcw } from "
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { getAITutorResponse } from "@/lib/aiTutorResponses";
+import { askBK9 } from "@/lib/bk9api";
 
 export const Route = createFileRoute("/_app/tutor")({
   component: AITutor,
@@ -60,14 +60,19 @@ function AITutor() {
     };
     setMessages((prev) => [...prev, userMsg]);
 
-    await new Promise((r) => setTimeout(r, 600 + Math.random() * 800));
-
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
       await supabase.from("ai_conversations").insert({ user_id: user.id, role: "user", content: msg }).select();
     }
 
-    const response = getAITutorResponse(msg);
+    let response: string;
+    try {
+      const subjectContext = subject !== "all" ? `Focus on ZIMSEC ${subject} topics.` : undefined;
+      response = await askBK9(msg, subjectContext);
+    } catch {
+      response = "Sorry, I could not reach the AI tutor right now. Please check your connection and try again.";
+    }
+
     const aiMsg: Message = {
       id: crypto.randomUUID(),
       role: "assistant",

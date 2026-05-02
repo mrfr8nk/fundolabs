@@ -84,7 +84,7 @@ export function RatesSimulation({ experiment }: { slug: string; experiment: Expe
           </text>
 
           <rect x="155" y="185" width="90" height="105" rx="6" fill="url(#acidGrad)" stroke="rgba(100,200,255,0.4)" strokeWidth="1.5" />
-          <rect x="157" y="270 - {concentration * 20}" width="86" height={`${concentration * 30 + 20}`}
+          <rect x="157" y={270 - concentration * 20} width="86" height={concentration * 30 + 20}
             fill="rgba(100,200,255,0.15)" />
           {surfaceArea === "lumps"
             ? [0, 1, 2, 3, 4].map((i) => (
