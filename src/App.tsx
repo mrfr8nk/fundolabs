@@ -14,7 +14,6 @@ import CreateLabPage from "@/pages/CreateLabPage";
 import TutorPage from "@/pages/TutorPage";
 import ExamPage from "@/pages/ExamPage";
 import ReportsPage from "@/pages/ReportsPage";
-import TeacherPage from "@/pages/TeacherPage";
 import SettingsPage from "@/pages/SettingsPage";
 import AboutPage from "@/pages/AboutPage";
 import BlogPage from "@/pages/BlogPage";
@@ -23,6 +22,7 @@ import PrivacyPage from "@/pages/PrivacyPage";
 import TermsPage from "@/pages/TermsPage";
 import CookiePolicyPage from "@/pages/CookiePolicyPage";
 import CurriculumPage from "@/pages/CurriculumPage";
+import AdminPage from "@/pages/AdminPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -82,7 +82,7 @@ export default function App() {
           <Route path="/tutor" element={<TutorPage />} />
           <Route path="/exam" element={<ExamPage />} />
           <Route path="/reports" element={<ReportsPage />} />
-          <Route path="/teacher" element={<TeacherPage />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
 

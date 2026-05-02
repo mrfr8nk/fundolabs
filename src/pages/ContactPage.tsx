@@ -1,20 +1,45 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { FlaskConical, Mail, MessageSquare, School, Send, MapPin, Phone, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function ContactPage() {
+  const [searchParams] = useSearchParams();
+  const planParam = searchParams.get("plan");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [subject, setSubject] = useState("general");
   const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (planParam) {
+      setSubject(planParam === "school" ? "school" : "general");
+      setMessage(`I'd like to sign up for the ${planParam.toUpperCase()} plan. Please contact me with payment options.\n\n`);
+    }
+  }, [planParam]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+    const { data: { user } } = await supabase.auth.getUser();
+    const { error } = await supabase.from("support_messages").insert({
+      user_id: user?.id ?? null,
+      full_name: name,
+      email,
+      phone: phone || null,
+      plan: planParam,
+      subject,
+      message,
+    });
+    setSubmitting(false);
+    if (error) { toast.error(error.message); return; }
     setSent(true);
     toast.success("Message sent! We'll respond within 24 hours.");
   };
@@ -97,13 +122,22 @@ export default function ContactPage() {
                   <MessageSquare className="h-5 w-5 text-primary" /> Send a message
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {planParam && (
+                    <div className="rounded-xl p-3 bg-primary/10 border border-primary/30 text-sm">
+                      Selected plan: <span className="font-bold text-primary uppercase">{planParam}</span>
+                    </div>
+                  )}
                   <div className="space-y-1.5">
                     <Label htmlFor="name">Full name</Label>
-                    <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required className="glass border-white/10" placeholder="Tendai Moyo" />
+                    <Input id="name" name="name" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} required className="glass border-white/10" placeholder="Tendai Moyo" />
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="email">Email address</Label>
-                    <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="glass border-white/10" placeholder="tendai@example.com" />
+                    <Input id="email" name="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="glass border-white/10" placeholder="tendai@example.com" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phone">Phone / WhatsApp (optional)</Label>
+                    <Input id="phone" name="phone" type="tel" autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className="glass border-white/10" placeholder="+263 77 123 4567" />
                   </div>
                   <div className="space-y-1.5">
                     <Label>Subject</Label>
@@ -122,8 +156,8 @@ export default function ContactPage() {
                       className="w-full glass border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary/40 transition bg-transparent resize-none placeholder:text-muted-foreground/50"
                       placeholder="Tell us what you need…" />
                   </div>
-                  <Button type="submit" className="w-full bg-gradient-to-r from-primary to-accent text-primary-foreground glow-primary h-11">
-                    <Send className="h-4 w-4 mr-2" /> Send message
+                  <Button type="submit" disabled={submitting} className="w-full bg-gradient-to-r from-primary to-accent text-primary-foreground glow-primary h-11">
+                    <Send className="h-4 w-4 mr-2" /> {submitting ? "Sending…" : "Send message"}
                   </Button>
                 </form>
               </div>

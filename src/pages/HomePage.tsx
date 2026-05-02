@@ -5,7 +5,8 @@ import {
   FlaskConical, Atom, Brain, GraduationCap, Sparkles, Wifi,
   CheckCircle2, ArrowRight, Beaker, Zap, BookOpen, Users,
   Star, Play, Share2, Download, ChevronRight, Microscope,
-  Dna, Thermometer, Activity, Layers, Globe, Shield, Award
+  Dna, Thermometer, Activity, Layers, Globe, Shield, Award,
+  Twitter, Facebook, Instagram, Youtube, Linkedin
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/Navbar";
@@ -805,7 +806,7 @@ function PricingSection() {
                 ))}
               </ul>
               <Button asChild className={`w-full h-11 font-semibold rounded-xl ${p.featured ? "bg-gradient-to-r from-primary to-accent text-primary-foreground glow-primary" : "glass border border-white/15 hover:bg-white/5"}`}>
-                <Link to="/auth">{p.cta}</Link>
+                <Link to={`/contact?plan=${encodeURIComponent(p.name.toLowerCase())}`}>{p.cta}</Link>
               </Button>
             </motion.div>
           ))}
@@ -921,7 +922,6 @@ function ProFooter() {
     Company: [
       { label: "About FundoLabs", href: "/about" },
       { label: "For Schools", href: "/contact" },
-      { label: "Teacher Dashboard", href: "/teacher" },
       { label: "Blog", href: "/blog" },
       { label: "Contact us", href: "/contact" },
     ],
@@ -953,10 +953,17 @@ function ProFooter() {
               <span className="text-sm text-muted-foreground">fundolabs.co.zw</span>
             </div>
             <div className="flex gap-3">
-              {["𝕏", "📘", "📸", "▶"].map((icon, i) => (
-                <button key={i} className="h-9 w-9 glass-card rounded-lg flex items-center justify-center text-sm hover:bg-primary/10 transition">
-                  {icon}
-                </button>
+              {[
+                { Icon: Twitter, label: "Twitter", href: "https://twitter.com" },
+                { Icon: Facebook, label: "Facebook", href: "https://facebook.com" },
+                { Icon: Instagram, label: "Instagram", href: "https://instagram.com" },
+                { Icon: Youtube, label: "YouTube", href: "https://youtube.com" },
+                { Icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com" },
+              ].map(({ Icon, label, href }) => (
+                <a key={label} href={href} aria-label={label} target="_blank" rel="noreferrer"
+                  className="h-9 w-9 glass-card rounded-lg flex items-center justify-center text-sm hover:bg-primary/10 hover:text-primary transition">
+                  <Icon className="h-4 w-4" />
+                </a>
               ))}
             </div>
           </div>

@@ -24,7 +24,12 @@ export function LabList({
           .eq("subject", subject)
           .order("difficulty");
         if (data && data.length > 0) {
-          setItems(data as Experiment[]);
+          // DB rows lack tools/steps/expectedResults/safetyNotes — merge with seed when available
+          const merged = (data as unknown as Experiment[]).map((row) => {
+            const seed = EXPERIMENTS.find((e) => e.slug === row.slug);
+            return seed ? { ...seed, ...row } : row;
+          });
+          setItems(merged);
         } else {
           setItems(EXPERIMENTS.filter((e) => e.subject === subject));
         }

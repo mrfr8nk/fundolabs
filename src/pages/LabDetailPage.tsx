@@ -202,7 +202,19 @@ export default function LabDetailPage() {
       if (local) setExp(local);
       else {
         const { data } = await supabase.from("experiments").select("*").eq("slug", safeSlug).maybeSingle();
-        if (data) setExp(data as Experiment);
+        if (data) {
+          const seed = getExperiment(data.slug);
+          const merged = seed
+            ? {
+                ...seed,
+                ...data,
+                description: data.description ?? seed.description,
+                difficulty: data.difficulty ?? seed.difficulty,
+                duration_minutes: data.duration_minutes ?? seed.duration_minutes,
+              }
+            : (data as unknown as Experiment);
+          setExp(merged as Experiment);
+        }
       }
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;

@@ -1,14 +1,14 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, FlaskConical, Atom, Brain, GraduationCap,
-  FileText, Users, Settings, LogOut, Menu, X, PlusCircle
+  FileText, Settings, LogOut, Menu, X, PlusCircle, Shield
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-const nav = [
+const baseNav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/labs/chemistry", label: "Chemistry Labs", icon: FlaskConical },
   { to: "/labs/physics", label: "Physics Labs", icon: Atom },
@@ -16,7 +16,6 @@ const nav = [
   { to: "/tutor", label: "AI Tutor", icon: Brain },
   { to: "/exam", label: "Exam Mode", icon: GraduationCap },
   { to: "/reports", label: "Reports", icon: FileText },
-  { to: "/teacher", label: "Teacher", icon: Users },
   { to: "/settings", label: "Settings", icon: Settings },
 ];
 
@@ -24,6 +23,20 @@ export function AppShell() {
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
+      setIsAdmin(!!data);
+      // log a site visit
+      supabase.from("site_visits").insert({ path: location.pathname, user_id: user.id, referrer: document.referrer, user_agent: navigator.userAgent });
+    })();
+  }, [location.pathname]);
+
+  const nav = isAdmin ? [...baseNav, { to: "/admin", label: "Admin Portal", icon: Shield }] : baseNav;
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
