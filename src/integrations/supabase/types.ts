@@ -232,6 +232,27 @@ export type Database = {
           },
         ]
       }
+      saved_experiments: {
+        Row: {
+          created_at: string
+          experiment_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          experiment_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          experiment_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       schools: {
         Row: {
           created_at: string
@@ -250,6 +271,72 @@ export type Database = {
           id?: string
           name?: string
           region?: string | null
+        }
+        Relationships: []
+      }
+      site_visits: {
+        Row: {
+          created_at: string
+          id: string
+          path: string
+          referrer: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          path: string
+          referrer?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          path?: string
+          referrer?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      support_messages: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          message: string
+          phone: string | null
+          plan: string | null
+          status: string
+          subject: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          message: string
+          phone?: string | null
+          plan?: string | null
+          status?: string
+          subject?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          message?: string
+          phone?: string | null
+          plan?: string | null
+          status?: string
+          subject?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
